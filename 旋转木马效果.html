@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0
+    }
+
+    ul {
+        list-style: none
+    }
+
+    img {
+        border: 0;
+        vertical-align: top;
+    }
+
+    a,
+    button {
+        cursor: pointer;
+    }
+
+    .wrap {
+        width: 1200px;
+        margin: 100px auto;
+    }
+
+    .slide {
+        height: 500px;
+        position: relative;
+    }
+
+    .slide li {
+        position: absolute;
+        left: 200px;
+        top: 0;
+        transition: all 350ms;
+    }
+
+    .slide li img {
+        width: 100%;
+    }
+
+    .prev,
+    .next {
+        width: 76px;
+        height: 112px;
+        position: absolute;
+        top: 50%;
+        margin-top: -56px;
+        background: url('./images(1)/prev.png') no-repeat;
+        z-index: 99;
+    }
+
+    .next {
+        right: 0;
+        background-image: url('./images(1)/next.png');
+    }
+
+    .slide li.left1 {
+        width: 400px;
+        top: 20px;
+        left: 50px;
+        opacity: 0.2;
+        z-index: 2;
+    }
+
+    .slide li.left2 {
+        width: 600px;
+        top: 70px;
+        left: 0px;
+        opacity: 0.8;
+        z-index: 3;
+    }
+
+    .slide li.middle {
+        width: 800px;
+        top: 100px;
+        left: 200px;
+        opacity: 1;
+        z-index: 4;
+    }
+
+    .slide li.right2 {
+        width: 600px;
+        top: 70px;
+        left: 600px;
+        opacity: 0.8;
+        z-index: 3;
+    }
+
+    .slide li.right1 {
+        width: 400px;
+        top: 20px;
+        left: 750px;
+        opacity: 0.2;
+        z-index: 2;
+    }
+</style>
+
+<body>
+    <div class="wrap" id="wrap">
+        <div class="slide" id="slide">
+            <ul>
+                <li class="left1">
+                    <a href="#"><img src="./images(1)/slidepic1.jpg" alt="" /></a>
+                </li>
+                <li class="left2">
+                    <a href="#"><img src="./images(1)/slidepic2.jpg" /></a>
+                </li>
+                <li class="middle">
+                    <a href="#"><img src="./images(1)/slidepic3.jpg" alt="" /></a>
+                </li>
+                <li class="right2">
+                    <a href="#"><img src="./images(1)/slidepic4.jpg" alt="" /></a>
+                </li>
+                <li class="right1">
+                    <a href="#"><img src="./images(1)/slidepic5.jpg" alt="" /></a>
+                </li>
+            </ul>
+            <div class="arrow" id="arrow">
+                <a href="javascript:;" class="prev" id="arrLeft"></a>
+                <a href="javascript:;" class="next" id="arrRight"></a>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        //获取两个箭嘴元素
+        let btnRight = document.querySelector('#arrRight');
+        let btnLeft = document.querySelector('#arrLeft');
+        //初始状态
+        let classNames = ['left1','left2','middle','right2','right1']
+            let lis = document.querySelectorAll('.slide li');
+            lis.forEach((e,i)=>{
+                e.className = classNames[i];
+            })
+
+        //右箭嘴
+        btnRight.onclick = function(){
+            let first = 
+        }
+    }
+</script>
+
+</html>

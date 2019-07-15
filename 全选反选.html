@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+    <tr>
+        <th>
+            <input type="checkbox" name="" id="checkAll"/>全选/全不选
+        </th>
+        <th>菜名</th>
+        <th>商家</th>
+        <th>价格</th>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" name="check" class="ck"/>
+        </td>
+        <td>红烧肉</td>
+        <td>隆江猪脚饭</td>
+        <td>￥200</td>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" name="check"  class="ck"/>
+        </td>
+        <td>香酥排骨</td>
+        <td>隆江猪脚饭</td>
+        <td>￥998</td>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" name="check" class="ck"/>
+        </td>
+        <td>北京烤鸭</td>
+        <td>隆江猪脚饭</td>
+        <td>￥88</td>
+    </tr>
+</table>
+</body>
+<script>
+    let checkAll =document.getElementById('checkAll');
+    let cks =document.getElementsByClassName('ck');
+    //全选和下面的选项一样
+    checkAll.onclick =function(){
+        var status = this.checked;
+        for(i= 0 ;i<cks.length;i++){
+            cks[i].checked =status;
+        }
+    }
+    //下面的选项，全选的话，全选也一起勾选，有一个不选，全选就不勾选，反证法；
+    for(var i = 0;i<cks.length;i++){
+       cks[i].onclick =function(){
+        //假设他全选;
+        var flag = true;
+        //反证一个不选;
+        for(var j=0;j<cks.length;j++){
+            if(cks[j].checked == false){
+                flag=false;
+                break;
+            }
+        }
+        
+        checkAll.checked = flag;
+       }    
+    }
+
+</script>
+</html>

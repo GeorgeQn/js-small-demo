@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .main {
+      width: 660px;
+      height: 660px;
+      background-image: url('./images/panze.png');
+      margin: 100px auto;
+      position: relative;
+    }
+
+    .zhizhen {
+      width: 338px;
+      height: 338px;
+      background-image: url('./images/zhizhen.png');
+      background-repeat: no-repeat;
+      background-position: center top;
+      position: absolute;
+      top: 129px;
+      left: 152px;
+      transition: transform 500ms linear;
+    }
+
+    .begin {
+      width: 138px;
+      height: 138px;
+      position: absolute;
+      top: 227px;
+      left: 252px;
+      border-radius: 50%;
+      /* background-color: rgba(255,0,0,.5); */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
+    <div class="zhizhen"></div>
+    <div class="begin"></div>
+  </div>
+</body>
+<script>
+  let zhizhen = document.querySelector('.zhizhen');
+  let begin = document.querySelector('.begin');
+  begin.addEventListener ('click',fn())
+  
+  
+  begin.removeEventListener('click',fn(){
+    angel = Math.random()*360;
+    zhizhen.style.transform = 'rotate(' + angel +'deg)';
+  })
+</script>
+
+</html>

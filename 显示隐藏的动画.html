@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .box {
+      width: 300px;
+      height: 300px;
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <input type="button" value="消失" id="btn1">
+  <input type="button" value="出现" id="btn2">
+  <input type="button" value="切换" id="btn3">
+  <input type="button" value="透明" id="btn4">
+  <input type="button" value="透明到显示" id="btn5">
+
+  <input type="button" value="消失透明切换" id="btn6">
+  <input type="button" value="消失透明切换" id="btn7">
+  <div class="box"></div>
+</body>
+<script src="../jquery/jquery-1.12.2.js"></script>
+<script>
+$('#btn1').on('click',function(){
+    $('.box').hide(1000);
+})
+$('#btn2').on('click',function(){
+    $('.box').show(1000);
+})
+$('#btn3').on('click',function(){
+    $('.box').toggle(1000);
+})
+$('#btn4').on('click',function(){
+    $('.box').fadeOut(1000);
+})
+$('#btn5').on('click',function(){
+    $('.box').fadeIn(1000);
+})
+$('#btn6').on('click',function(){
+    $('.box').fadeToggle(1000);
+})
+$('#btn7').on('click',function(){
+    $('.box').fadeTo(1000,0.5,function(){
+        $('.box').css('height',100);
+    });
+})
+</script>
+</html>

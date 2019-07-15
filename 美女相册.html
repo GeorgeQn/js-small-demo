@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .all{
+        margin: 50px auto;
+    }
+</style>
+<body>
+    <div class="all">
+        <div class="up">
+            <input type="button" value="美女1" data-src='./01.jpg'>
+            <input type="button" value="美女2" data-src='./02.jpg'>
+            <input type="button" value="美女3" data-src='./03.jpg'>
+            <input type="button" value="美女4" data-src='./04.jpg'>
+            <input type="button" value="美女5" data-src='./05.jpg'>
+        </div>
+        <div class="down">
+            <img src="./01.jpg" alt="">
+        </div>
+    </div>
+</body>
+<script>
+    var inputs =document.getElementsByTagName('input');
+    var img =document.getElementsByTagName('img');
+    for(i = 0;i<inputs.length;i++){
+        inputs[i].onclick =function(){
+            
+            var abc = this.dataset.src;
+            img[0].src = abc;
+        }
+    }
+</script>
+
+</html>

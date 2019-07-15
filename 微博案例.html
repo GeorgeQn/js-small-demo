@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .weibo {
+            width: 600px;
+            border: 1px solid #ccc;
+
+            margin: 100px auto;
+            padding: 10px;
+
+        }
+
+        .weibo-text {
+            width: 590px;
+            height: 140px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+            resize: none;
+        }
+
+        .weibo-text:focus {
+            border-color: #f60;
+        }
+
+        .weibo-btn {
+            width: 80px;
+            height: 30px;
+            background-color: #f90;
+            color: #fff;
+            border: 0 none;
+            margin-top: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            outline: 0 none;
+        }
+
+        .weibo-list {
+            padding-top: 10px;
+        }
+
+        .weibo-list li {
+            font-size: 14px;
+            line-height: 30px;
+            border-bottom: 1px dotted #ccc;
+            overflow: hidden;
+        }
+
+        .weibo-list li p {
+            float: left;
+        }
+
+        .weibo-list li span {
+            float: right;
+            cursor: pointer;
+        }
+
+        .weibo-list li input {
+            height: 24px;
+            line-height: 24px;
+            width: 300px;
+            font-size: 14px;
+            border: 0 none;
+        }
+
+        .time {
+            margin-right: 10px;
+            font-style: normal;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="weibo">
+        <textarea class="weibo-text"></textarea>
+        <input class="weibo-btn" value="发布" type="button">
+        <ul class="weibo-list">
+            <li>
+                <p>快来收了这九款用上就停不下来的应用吧！！</p>
+                <span>删除</span>
+            </li>
+            <li>
+                <p>超级详细的云南大理自助游攻略</p>
+                <span>删除</span>
+            </li>
+            <li>
+                <p>外国最近很火的舞蹈，舒服简单自然，太棒了！</p>
+                <span>删除</span>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    let btn = document.querySelector('.weibo-btn');
+    let text = document.querySelector('.weibo-text');
+    let list = document.querySelector('.weibo-list');
+    //事件1：增加li
+    btn.onclick = function(){
+        txt = text.value;
+        li = document.createElement('li');
+        li.innerHTML = '<p>' + txt + '</p><span>删除</span>';
+        list.insertBefore(li,list.children[0]);
+        txt = '';
+    }
+    //事件2：删除li
+    list.addEventListener('click',function(e){
+        if(e.target.nodeName === "SPAN"){
+            var li = e.target.parentNode;
+            list.removeChild(li);
+        }
+    })
+    //事件3: 键盘ctrl+enter
+    text.onkeydown = function(e){
+        if(e.ctrlKey && e.keyCode === 13){
+            btn.onclick();
+        }
+    }
+</script>
+</html>
