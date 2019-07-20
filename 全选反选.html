@@ -1,73 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <table>
-    <tr>
-        <th>
-            <input type="checkbox" name="" id="checkAll"/>全选/全不选
-        </th>
-        <th>菜名</th>
-        <th>商家</th>
-        <th>价格</th>
-    </tr>
-    <tr>
-        <td>
-            <input type="checkbox" name="check" class="ck"/>
-        </td>
-        <td>红烧肉</td>
-        <td>隆江猪脚饭</td>
-        <td>￥200</td>
-    </tr>
-    <tr>
-        <td>
-            <input type="checkbox" name="check"  class="ck"/>
-        </td>
-        <td>香酥排骨</td>
-        <td>隆江猪脚饭</td>
-        <td>￥998</td>
-    </tr>
-    <tr>
-        <td>
-            <input type="checkbox" name="check" class="ck"/>
-        </td>
-        <td>北京烤鸭</td>
-        <td>隆江猪脚饭</td>
-        <td>￥88</td>
-    </tr>
-</table>
-</body>
-<script>
-    let checkAll =document.getElementById('checkAll');
-    let cks =document.getElementsByClassName('ck');
-    //全选和下面的选项一样
-    checkAll.onclick =function(){
-        var status = this.checked;
-        for(i= 0 ;i<cks.length;i++){
-            cks[i].checked =status;
-        }
-    }
-    //下面的选项，全选的话，全选也一起勾选，有一个不选，全选就不勾选，反证法；
-    for(var i = 0;i<cks.length;i++){
-       cks[i].onclick =function(){
-        //假设他全选;
-        var flag = true;
-        //反证一个不选;
-        for(var j=0;j<cks.length;j++){
-            if(cks[j].checked == false){
-                flag=false;
-                break;
-            }
-        }
-        
-        checkAll.checked = flag;
-       }    
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
     }
 
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      border: 1px solid #c0c0c0;
+      width: 500px;
+      margin: 100px auto;
+      text-align: center;
+    }
+
+    th {
+      background-color: #09c;
+      font: bold 16px "微软雅黑";
+      color: #fff;
+      height: 24px;
+    }
+
+    td {
+      border: 1px solid #d0d0d0;
+      color: #404060;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <table>
+    <tr>
+      <th>
+        <input type="checkbox" id="checkAll" />全选/全不选
+      </th>
+      <th>菜名</th>
+      <th>商家</th>
+      <th>价格</th>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="check" class="ck" />
+      </td>
+      <td>红烧肉</td>
+      <td>隆江猪脚饭</td>
+      <td>￥200</td>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="check" class="ck" />
+      </td>
+      <td>香酥排骨</td>
+      <td>隆江猪脚饭</td>
+      <td>￥998</td>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="check" class="ck" />
+      </td>
+      <td>北京烤鸭</td>
+      <td>隆江猪脚饭</td>
+      <td>￥88</td>
+    </tr>
+  </table>
+</body>
+<script>
+  /*
+    类似 checked  selected 这种属性，出现和不出现，就只有两种结果我们称为 开关属性
+    在js里面有一种数据类型，也是只有两个值的，所以就直接使用布尔类型来控制 开关属性
+  */
+
+  /*
+    效果：
+      1. 全选和全不选
+        点击全选的多选框的时候，让底下的每一项和我的勾选状态一致就行
+      2.如果底下的每一项都勾选，让全选也勾选
+        只要判断下面的每一项都勾线，就让全选也勾选
+  
+    步骤：
+      1.获取全选多选框
+      2.给它注册点击事件
+      3.在事件处理程序里面，获取勾选的状态，设置给底下的每一项
+
+      1.获取所有的下面的每一项
+      2.给每一项注册点击事件
+      3.判断是否每一项都勾选，如果勾选了，让全选也勾选，否则就让全选不勾选
+  */
+  // 获取元素
+  let ckAll = document.getElementById('checkAll');
+  let cks = document.getElementsByClassName('ck');
+  // console.log(cks);
+  // 注册点击事件
+  ckAll.onclick = function () {
+    // console.log(ckAll.checked);
+    // 先得到当前是否全选
+    let isCheckALl = ckAll.checked;
+    // 设置底下的每一项都和全选的多选框一致
+    for (let i = 0; i < cks.length; i++) {
+      cks[i].checked = isCheckALl;
+    }
+  }
+  // 给每一项的多选框注册点击事件
+  for(let j = 0; j < cks.length; j++){
+    cks[j].onclick = function(){
+      // 判断每一项，是否勾选 - 此时是要求多个条件同时成立，要求使用 反证法
+      // 1 先假设已经全都勾选了
+      let flag = true;
+      // 2 循环的找反例
+      for(let k = 0; k < cks.length; k++){
+        // if(cks[k].checked === false){
+        if(!cks[k].checked){
+          flag = false;
+          break;
+        }
+      }
+      ckAll.checked = flag;
+      // 3 判断是否找到了反例
+      // if(flag === true){
+      //   // 没找到
+      //   // 就让全选也勾选
+      //   ckAll.checked = true;
+      // }else {
+      //   // 找到反例了
+      //   ckAll.checked = false;
+      // }
+      
+    }
+  }
+
 </script>
+
 </html>
