@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+/*
+  模拟实现Math.max()
+    Math.max的特点
+      可以求任意个数字的最大值
+*/
+function max() {
+  var m = arguments[0];
+  for(var i =0; i < arguments.length; i++){
+    if(m < arguments[i]){
+      m = arguments[i];
+    }
+  }
+  return m;
+}
+</script>
+</html>
