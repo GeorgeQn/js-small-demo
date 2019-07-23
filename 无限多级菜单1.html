@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .main {
+      width: 1200px;
+      margin: 0 auto;
+    }
+
+    ul {
+      list-style: none;
+      max-width: 300px;
+      background-color: #000;
+      padding: 4px;
+    }
+
+    li {
+      margin-top: 4px;
+      padding-left: 10px;
+    }
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 1px dashed #fff;
+      font-size: 24px;
+    }
+
+    a::before {
+      content: "☆"
+    }
+
+    .hide {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
+    <div class="nav">
+
+    </div>
+  </div>
+</body>
+<script>
+  /*
+    什么时候会用到这个无限多级菜单
+      1.带权限控制的后台管理系统
+        权限是基于角色不同的
+          如果是 董事长 可以操作所有的业务
+          如果是 财务，就只能出现和财务相关的菜单
+          如果是 人事，就指挥出现和人事相关的菜单
+      2.怎么做？
+        2.1 登录 - 登录的过程中，服务器会判断你是哪个角色
+        2.2 根据你的不同的角色，生成一个菜单的数组给你
+        2.3 前端就会根据这个菜单数组，动态生成一个多级菜单
+  */
+
+  let navData = [
+    { id: 1, text: '一级菜单A', parentId: null },
+    { id: 2, text: '一级菜单B', parentId: null },
+    { id: 3, text: '一级菜单C', parentId: null },
+    { id: 4, text: '二级菜单AA', parentId: 1 },
+    { id: 5, text: '二级菜单AB', parentId: 1 },
+    { id: 6, text: '二级菜单AC', parentId: 1 },
+    { id: 7, text: '二级菜单BA', parentId: 2 },
+    { id: 8, text: '二级菜单BB', parentId: 2 },
+    { id: 9, text: '二级菜单BC', parentId: 2 },
+    { id: 10, text: '二级菜单CA', parentId: 3 },
+    { id: 11, text: '二级菜单CB', parentId: 3 },
+    { id: 12, text: '二级菜单CC', parentId: 3 },
+    { id: 13, text: '三级菜单AAA', parentId: 4 },
+    { id: 14, text: '三级菜单BAA', parentId: 7 },
+    { id: 15, text: '三级菜单CAA', parentId: 10 }
+  ];
+  // 数据结构
+  // id : 唯一标识，text ：菜单的文字 ,paretnid : 父级菜单的id
+
+  /*
+    arr 就是从服务器获取回来的菜单数组
+    fjid 就是子级菜单的父级的id
+  */
+    function fn(arr,fjid){
+        let temp = [];
+        arr.forEach(e=>{
+            if(e.parentId === fjid){
+                temp.push(e);
+                e.child = fn(arr,e.id)
+            }
+        })
+        return temp;
+    }
+
+    let menu = fn(navData,null);
+
+    function fn2(ulParent,arr){
+        let ul = document.createElement('ul');
+        ul.classList.add('hide');
+        ulParent.appendChild(ul);
+        arr.forEach(e=>{
+            let li = document.createElement('li');
+            li.innerHTML = `<a href = "#">${e.text}</a>`;
+            ul.appendChild(li);
+            if(e.child.length !== 0){
+                fn2(li,e.child);
+            }
+        })
+    }
+
+    let nav = document.querySelector('.nav');
+    fn2(nav,menu);
+
+    nav.children[0].classList.remove('hide');
+
+    lis = document.querySelectorAll('li');
+    lis.forEach(e=>{
+        e.onclick = function(e) {
+            e.stopPropagation();
+            if(this.children.length != 1){
+                this.children[1].classList.toggle('hide');
+            }
+        }
+    })
+</script>
+
+</html>

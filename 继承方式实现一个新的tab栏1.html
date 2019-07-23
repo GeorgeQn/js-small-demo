@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    .container {
+      width: 600px;
+      height: 400px;
+      border: 1px solid #000;
+      margin: 100px auto;
+    }
+
+    .nav::after,
+    .nav::before {
+      content: "";
+      clear: both;
+      display: block;
+    }
+
+    .nav li {
+      float: left;
+      width: 100px;
+      height: 60px;
+      text-align: center;
+      line-height: 60px;
+      border-bottom: 1px solid #000;
+      border-right: 1px solid #000;
+    }
+
+    .nav li.active {
+      background-color: hotpink;
+    }
+    .nav li.red {
+      background-color: red;
+    }
+
+    .row {
+      border-top: 1px solid #000;
+    }
+
+    .row .content {
+      height: 338px;
+      background-color: green;
+      display: none;
+    }
+
+    .row .show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- 每个分类 -->
+    <ul class="nav">
+      <li class="active">影音</li>
+      <li>书籍</li>
+      <li>零食</li>
+    </ul>
+    <!-- 分类对应的多个内容 -->
+    <div class="row">
+      <div class="content show">影音的对应的内容</div>
+      <div class="content">书籍的对应的内容</div>
+      <div class="content">零食的对应的内容</div>
+    </div>
+  </div>
+</body>
+<script src="./tab1.js"></script>
+<script>
+  //继承的方式实现tab栏，然后封装函数，然后调用
+  //1.鼠标移过，内容栏会随着tab栏的切换而相对应切换；即是index索引相等
+  //2.tab栏定时切换
+  class AutoTab extends Tab{
+    constructor(options){
+      super(options);
+      options = options || {};
+      this.interval = options.interval || 1000;
+    }
+    autoPlay(){
+      let index = 0;
+      let lis = document.querySelectorAll(this.navSelector);
+      let contents = document.querySelectorAll(this.contentSelector);
+      this.timer = setInterval(()=>{
+        index = ++index % lis.length;
+        this.changeNavStyle(lis,lis[index]);
+        this.changeContentStyle(contents,contents[index]);
+      },this.interval);
+    }
+  }
+
+  let auto = new AutoTab();
+  auto.addEvent();
+  auto.autoPlay();
+</script>
+
+</html>

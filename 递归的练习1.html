@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //使用递归求阶乘
+    // function jieCheng(n){
+    //     if(n === 1){return 1};
+    //     return n * jieCheng(n-1);
+    // }
+    // console.log(jieCheng(500));
+
+    //斐波拉契数列的递归
+// 1 1+0 1+1 1+0+1+1
+//    n            n-1         n-2           2 1
+// (n-1)+(n-2) (n-2)+(n-3) (n-3)+(n-4)   ... 1 1
+
+    function fbl(n){
+        if(n === 1 || n === 2){return 1};
+        return fbl(n-1) + fbl(n-2);//(n-1)+(n-2);
+    }
+    console.log(fbl(40));
+    console.log(fbl(2));
+    console.log(fbl(3));
+    console.log(fbl(4));
+    console.log(fbl(5));
+    console.log(fbl(6));
+    console.log(fbl(7));
+    console.log(fbl(8));
+    console.log(fbl(9));
+</script>
+</html>
