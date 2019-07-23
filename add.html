@@ -1,0 +1,159 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hero - Admin</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <style>
+        .hero-list img {
+            width: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="page-header container">
+            <h1>王者荣耀 <small>英雄管理器</small></h1>
+        </div>
+    </header>
+    <div class="container hero-list">
+        <form id='myform'>
+            <input type="hidden" name="img" id="headSrc">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td>姓名：</td>
+                        <td><input type="text" name="name"></td>
+                    </tr>
+                    <tr>
+                        <td>性别：</td>
+                        <td><input id="nan" name="gender" value="男" type="radio"><label for="nan">男</label> <input
+                                name="gender" value="女" type="radio" id="nv"><label for="nv">女</label></td>
+                    </tr>
+                    <tr>
+                        <td>头像：</td>
+                        <td><img src="../static/images/0.jpg" alt="" id="photo" width="100">
+                            <input type="file" id="img"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input class="btn btn-primary" type="button" id="sub" value="新增"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">提水</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        新增失败
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="../static/js/jquery.js"></script>
+<script>
+    /*
+        使用ajax上传文件
+    
+            本身ajax是无法上传图片的，需要配合一个新的对象使用
+                FormData
+    
+                    作用： 收集表单数据
+    
+                    怎么用： 
+                        let 变量 = new FormData(表单元素)
+    */
+
+    /*
+        要上传图片，是点击选择文件按钮之后，再来获取数据
+    
+            给选择文件按钮注册事件,但是不是点击事件，而是另一个新的事件：
+                change - 改变事件
+                    该事件会在表单控件的value属性发生变化之后触发
+        
+        上传图片的步骤：
+            1.注册事件
+            2.在事件处理程序里面获取图片
+            2.5 把图片转换为文件流 - FormData
+            3.使用ajax把图片上传到服务器
+    
+        如何获取图片呢？在文件选择按钮对象身上，有一个属性： files ，里面会装有所有的被选择的文件
+        该对象是一个伪数组，伪数组里面的根据索引就可以得到我们选中的图片
+    
+        思考一个问题：
+            上传图片和以前注册登录有什么不同？
+                以前注册登录发送回服务器的是字符串
+                发送回服务器是一个文件
+                    字符串的数据量一般比较小
+                    文件可能很大 
+    
+                    一般上传文件，都会使用post方式
+        发现不同之后：
+            get方式 - 数据是放在url的后面的
+                - 传递的数据量是比较小的 - 大概只有4k左右
+            post方式 - 数据是放在请求体里面的
+                - post能够携带数据量比get方式大很多 - 理论上没有上限
+                - 一般服务器的资源是很珍贵的，一般都会在服务器上面限制能够上传的大小
+    
+            如果是大文件
+                无法一瞬间把大文件上传到服务器 - 必须 250kb/s 的上传
+    
+                把网线比喻为 自来水管
+                自己的文件就是自来水厂
+                把自来水传输到用水的家庭，就必须一点一点的输送
+                水是液体 ，所以可以一点一点的输送
+                但是文件是固体
+                所以需要把固定先融化为液体 - 文件流
+    
+            上传图片需要先把图片转换为文件流
+    */
+    let btn = document.querySelector('#img');
+    btn.onchange = function () {
+        // console.log(this.files);
+        // 获取文件
+        let file = this.files[0];
+        // 把文件转换为文件流
+        // 利用 FormData
+        let fd = new FormData();
+        // 调用formdata对象的把数据添加到它里面的方法
+        // fd.append(键,值); 服务器会根据键得到对应的值
+        fd.append('pic', file); // 可以把文件转换为文件流
+        // 使用ajax发送请求
+        let xhr = new XMLHttpRequest();
+        xhr.open('post', 'http://127.0.0.1:8080/uploadHeadImg');
+        // 以前我们会在发送请求之前设置请求头，但是如果使用FormData对象，会自动的设置一个最合适的请求头，我们就不用自己设置了
+        // xhr.setRequestHeader
+        xhr.send(fd);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // console.log(xhr.responseText);
+                let res = JSON.parse(xhr.responseText);
+                if(res.code == 200){
+                    // 获取到了服务器返回的数据之后，把图片的地址替换一下
+                    $("#photo").attr('src',res.baseDir+res.filePath);
+                }
+            }
+        }
+    }
+
+</script>
+
+</html>
