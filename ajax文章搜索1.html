@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>动态网页</title>
+  <style>
+    @keyframes linear {
+      50% {
+        background-color: #ff00ff;
+      }
+
+      100% {
+        background-color: #00cfff;
+      }
+    }
+
+    body {
+      padding: 0;
+      margin: 0;
+      background-color: #e7e7e7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    #app {
+      width: 375px;
+      margin: auto;
+      height: 100vh;
+      background-color: #fff;
+    }
+
+    header {
+      /* height: 36px; */
+      padding: 6px 10px;
+      background-color: #fa0000;
+      animation: linear 10s linear 0s infinite alternate  forwards;
+    }
+
+    input {
+      border: 0;
+      width: 100%;
+      outline: none;
+      border-radius: 20px;
+      height: 30px;
+      text-indent: 16px;
+    }
+
+    li {
+      list-style: none;
+      line-height: 30px;
+      border-bottom: 1px solid #c7c7c7;
+      padding-left: 10px;
+    }
+
+    footer {}
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <input id="filter" type="text" placeholder="请输入搜索内容">
+    </header>
+    <div class="content">
+      <li></li>
+      <li></li>
+    </div>
+  </div>
+
+</body>
+<script src="../jQuery预习资料/jquery.js"></script>
+<script>
+    //获取并展示文章内容
+    let xhr =new XMLHttpRequest();
+    xhr.open('get','http://127.0.0.1:8080/getSearchArticle');
+    xhr.send();
+    xhr.onreadystatechange =function(){
+        if(xhr.readyState === 4 && xhr.status === 200){
+            var res = JSON.parse(xhr.responseText);
+            res.data.forEach(function(item){
+                $('<li>').html(item.content).appendTo($('.content'));
+            })
+        }
+    }
+
+
+    //根据输入内容，请求文章数据
+    $('#filter').on('input',function(){
+        var val = $(this).val();
+        var xhr = new XMLHttpRequest();
+        xhr.open('get','http://127.0.0.1:8080/getSearchArticle?search=' + val);
+        xhr.send();
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var res = JSON.parse(xhr.responseText);
+                $('.content').html('');
+                res.data.forEach(function(item){
+                    $('<li>').html(item.content).appendTo($('.content'));
+                })
+            }
+        }
+    })
+
+</script>
+</html>
