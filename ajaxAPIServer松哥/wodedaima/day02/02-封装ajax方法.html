@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+// ajax的步骤是固定的，只不过是get和post请求里面稍有不同
+// 封装
+
+// 分析过程发现，ajax请求的过程中，有三个东西可以产生变化
+// 1. 请求方式  2.请求地址  3.发送回数据 4.别人的逻辑
+// ajax('get','127.0.0.1:8080/getCode','phone=13377890765')
+
+function ajax(type,url,data,callback) {
+  let xhr = new XMLHttpRequest();
+  // 如果是get请求，把数据拼接在url的后面的
+  if(type === 'get'){
+    // 127.0.0.1:8080/getCode?phone=13377890765
+    url += '?' + data;
+  } 
+  xhr.open(type,url);
+  // 如果是post请求， 把数据放在send的里面，在之前还要设置请求头
+  if(type === 'post'){
+    // 先设置请求头
+    xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+    xhr.send(data);
+  }else {
+    xhr.send();
+  }
+  
+  xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4){
+      if(xhr.status === 200){
+        // 请求成功
+        // console.log(xhr.responseText);
+        // 如果遇上别人的逻辑在封装的代码里面，最好的处理方式——回调函数
+        callback(xhr.responseText);
+        // callback();
+      }
+    }
+  }
+}
+
+
+// 测试
+// ajax('get','http://127.0.0.1:8080/isUserNameExist','userName=123456',function(res){
+//   console.log(res);
+//   console.log(1234);
+// })
+
+// ajax('post','http://127.0.0.1:8080/doLogin','userName=ligoudan&password=123456',function(res){
+//   console.log(res);
+// });
+
+</script>
+</html>

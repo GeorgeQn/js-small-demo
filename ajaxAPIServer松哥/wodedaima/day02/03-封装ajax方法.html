@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+// 这样封装使用起来不方便
+/*
+  确定：
+    1.不一定所有的请求都带参数 - 默认值
+    2.多个参数传递按照一定的顺序就比较复杂 - 使用无序传参 - 对象传参
+*/
+
+/*
+  options 是一个对象 - 
+    -要求的属性是4个
+      type,url,data,callback
+*/
+
+function ajax(options) {
+  options = options || {};
+  options.type = options.type || 'get';
+  options.url = options.url || '';
+  options.data = options.data || '';
+  options.callback = options.callback || function(res){ 
+    console.log('你的回调函数没给，我们不建议这样干');  
+    console.log(res); 
+  }
+
+  let xhr = new XMLHttpRequest();
+  // 如果是get请求，把数据拼接在url的后面的
+  if(options.type === 'get'){
+    // 127.0.0.1:8080/getCode?phone=13377890765
+    options.url += '?' + options.data;
+  } 
+  xhr.open(options.type,options.url);
+  // 如果是post请求， 把数据放在send的里面，在之前还要设置请求头
+  if(options.type === 'post'){
+    // 先设置请求头
+    xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+    xhr.send(options.data);
+  }else {
+    xhr.send();
+  }
+  
+  xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4){
+      if(xhr.status === 200){
+        // 请求成功
+        // console.log(xhr.responseText);
+        // 如果遇上别人的逻辑在封装的代码里面，最好的处理方式——回调函数
+        options.callback(xhr.responseText);
+      }
+    }
+  }
+}
+
+// 测试
+// ajax({
+//   data : 'userName=123',
+//   callback : function(res){
+//     console.log(res);
+//   },
+//   type: 'get',
+//   url : 'http://127.0.0.1:8080/isUserNameExist'  
+// });
+
+// ajax({
+//   url :'http://127.0.0.1:8080/isUserNameExist',
+//   data : 'userName=123'
+// });
+
+
+ajax({
+  url : 'http://127.0.0.1:8080/getCodeWithoutPhone',
+  callback : function(res){
+    console.log(res);
+    console.log('这是我们自己的回调');
+  }
+});
+
+</script>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <!-- <form action="" enctype="application/x-www-form-urlencoded"></form> -->
+</body>
+<script>
+/*
+  4步
+    1 创建异步对象
+    2 设置请求方式和请求地址
+    3 发送请求
+    4 监听通信状态变化
+*/
+
+// 这是get请求的使用过程
+// let xhr = new XMLHttpRequest();
+// //请求方式和请求地址都是从API说明文档里面获取的
+// xhr.open('get','http://127.0.0.1:8080/getCodeWithoutPhone');
+// xhr.send();
+// xhr.onreadystatechange = function(){
+//   if(xhr.readyState == 4){
+//     if(xhr.status === 200){
+//       console.log(xhr.responseText);
+//     }
+//   }
+// }
+
+
+let userName = 'ligoudan';
+let password = '123456';
+// post方式的ajax
+let xhr = new XMLHttpRequest();
+xhr.open('post',' http://127.0.0.1:8080/doLogin');
+// post请求和get请求不一样的地方在于： 要设置请求头
+xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+xhr.send('userName='+ userName +'&password='+password);
+console.log('userName='+ userName +'&password='+password);
+xhr.onreadystatechange = function(){
+  if(xhr.readyState === 4){
+    if(xhr.status === 200){
+      console.log(xhr.responseText);
+    }
+  }
+}
+</script>
+</html>
