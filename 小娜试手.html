@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //q退出；
+    //1总和；
+    //2实时事件；
+    //3随机笑话;
+    //封装封装所有对象
+    function XiaoNa() {
+        //小娜的询问
+        this.ask = function () {
+            var msg = prompt('请输入一下的数字或者关键字\n输入1或者总和，可以求总和\n输入2或者时间，可以得到现在的时间\n输入3或者笑话，可以讲笑话，\n输入q退出');
+            return msg;
+        }
+        //计算总和
+        this.calculate = function () {
+            // 先弹出输入框，提示用户输入
+            var numbers = prompt('请输入要求和的数字，以逗号隔开');
+            // 把输入的内容，按照逗号分割
+            var arr = numbers.split(',');
+            // 求和
+            var sum = 0;
+            for (var i = 0; i < arr.length; i++) {
+                sum += parseFloat(arr[i]);
+            }
+            alert(sum);
+        }
+        //时间
+        this.getDate = function () {
+            var date = new Date();
+            var y = date.getFullYear();
+            var M = date.getMonth() + 1;
+            var d = date.getDate();
+            var h = date.getHours();
+            var m = date.getMinutes();
+            var s = date.getSeconds();
+            M = M < 10 ? '0' + M : M;
+            d = d < 10 ? '0' + d : d;
+            h = h < 10 ? '0' + h : h;
+            m = m < 10 ? '0' + m : m;
+            s = s < 10 ? '0' + s : s;
+            var time = y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s;
+            alert(time);
+        }
+        //随机笑话
+        this.sayJoke = function () {
+            var jokes = ['笑话1', '笑话2', '笑话3', '笑话4', '笑话5', '笑话6'];
+            var index = Math.floor(Math.random() * jokes.length);
+            alert(jokes[index]);
+        }
+        //错误输入
+        this.mengbi = function () {
+            alert('我听不懂');
+        }
+    }
+    //主结构
+    var xiaona = new XiaoNa();
+    while (true) {
+        var msg =xiaona.ask();
+        if(msg == 'q'){
+            break;
+        }
+
+        switch(msg){
+            case '1':
+            case '总和':
+            xiaona.calculate();
+            break;
+            case '2':
+            case '时间':
+            xiaona.getDate();
+            break;
+            case '3':
+            case '笑话':
+            xiaona.sayJoke();
+            break;
+            default:
+            xiaona.mengbi();
+            break;
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+/*
+有个人想知道，一年之内一对兔子能繁殖多少对？于是就筑了一道围墙把一对兔子关在里面。已知一对兔子每个月可以生一对小兔子，而一对兔子从出生后第3个月起每月生一对小兔子。假如一年内没有发生死亡现象，那么，一对兔子一年内（12个月）能繁殖成多少对？（兔子的规律为数列，1，1，2，3，5，8，13，21 --> 第三个数字 = 前面两个数字的和）
+*/ 
+
+var n1 = 1;//第一个月对数;
+var n2 = 1;//第二个月对数;
+var n3 //第三个月对数;
+    for(i=3;i<=12;i++){
+        n3 = n1 + n2;
+        n1 = n2;
+        n2 = n3;
+    }
+    document.write(n3);
+</script>
+</html>

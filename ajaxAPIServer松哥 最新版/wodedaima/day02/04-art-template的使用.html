@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+</head>
+<body>
+  
+</body>
+<script src="../../static/js/template-web.js"></script>
+<script type="text/template" id="temp">
+  <div>李狗蛋<%=$data.name%>翠花</div>
+  <% if($data.gender == '男') { %>
+  <div>♂</div>
+  <% }else { %>
+  <div>♀<div>
+  <% } %>
+</script>
+
+<script type="text/template" id="tp2">
+  <% for(var i =0; i < $data.length; i++) { %>
+    <li><%=$data[i].name%></li>
+  <% } %>
+</script>
+
+<script>
+/*
+  art-template的模板语法
+
+    模板引擎的输出变量的语法
+      <%=变量%>
+
+    判断语法
+    <% if(条件) { %>
+      你想要出现的结构
+    <% } %>
+
+    循环语法
+    <% for(var i =0; i < $data.length; i++) { %>
+      <li><%=$data[i].name%></li>
+    <% } %>
+
+*/
+// 把数据导入模板
+// art-template 有一个方法用于导入数据
+// template(模板id,数据对象);
+// let str = template('temp',{name:'铁蛋',gender:'女'});
+// console.log(str);
+
+let arr = [{name : '狗蛋'},{name : '翠花'},{name : '狗剩'}];
+let str = template('tp2',arr);
+console.log(str);
+</script>
+</html>
