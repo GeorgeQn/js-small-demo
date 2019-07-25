@@ -146,105 +146,142 @@
         });
     }
 
+    /*
+    	效果：
+    		1 验证数据是否为空 - 用户名、密码、手机、验证码
+    		2 验证用户名是否重复
+    		3 获取验证码 - 验证码还要短时间内不能重复点击
+    		4 实现注册
+    
+    	步骤：
+    		1. 给所有的输入框，注册失去焦点，提示不能为空
+    		2. 用户名的输入框失去焦点的时候，到服务器请求一下，看看用户名是否重复
+    		3. 点击验证码的按钮，发送获取验证码的请求
+    		4. 点击注册按钮，把表单里面用户名，密码，手机，验证码带回服务器
+    */
     $(function () {
-        // 1.用户名验证非空
-        $('.name').on('blur', function () {
+        // 1 给用户名验证非空
+        $(".name").on('blur', function () {
+            // 获取当前的内容
             var currentValue = $(this).val();
-            if(currentValue.trim().length === 0){
-                $('.tips > p').text('用户名不能为空').stop().fadeIn(100,function(){
+            // 判断是否是空字符串
+            if (currentValue.trim().length === 0) {
+                $('.tips > p').text('用户名不能为空').stop().fadeIn(100, function () {
                     var _this = this;
-                    setTimeout(function(){
+                    setTimeout(function () {
                         $(_this).stop().fadeOut(3000);
-                    },1000);
+                    }, 1000);
                 });
-                //如果是空的话，就不再往下继续执行
+                // 如果是空的，就不再继续往下执行了
                 return;
             }
-        })
 
-        //2.验证用户名是否重复
-        var xhr = new XMLHttpRequest();
-        xhr.open('get','http://127.0.0.1:8080/isUserNameExist?userName=' + currentValue);
-        xhr.send();
-        xhr.onreadystatechange = function(){
-            if(xhr.readyState === 4 && xhr.status === 200){
-                var resObj = JSON.parse(xhr.responseText);
-                if(resObj.code != 200){
-                    $('.tips > p'.text('用户名已经存在').stop().fadeIn(100,function(){
-                        var _this = this;
-                        setTimeout(function(){
-                            $(_this).stop().fadeOut(3000);
-                        },1000)
-                    }))
+            // 2. 验证用户名是否重复
+            // 使用ajax把接口请求一下
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', 'http://127.0.0.1:8080/isUserNameExist?userName=' + currentValue);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // console.log(xhr.responseText); // 原生的ajax返回的响应体是一个字符串
+                    var resObj = JSON.parse(xhr.responseText);
+                    console.log(resObj);
+                    // 根据返回的结果，判断一下，如果用户名已经被使用，提示用户
+                    if (resObj.code != 200) {
+                        $('.tips > p').text('用户名已经存在').stop().fadeIn(100, function () {
+                            var _this = this;
+                            setTimeout(function () {
+                                $(_this).stop().fadeOut(3000);
+                            }, 1000);
+                        });
+                    }
                 }
             }
-        }
 
-        //3.点击获取验证码
-        $('.verify').on('click',function(){
-            if($(this).hasClass('disabled')){
+        });
+
+        // 3 点击获取验证码
+        $(".verify").on('click', function () {
+            // 判断该按钮是否已经禁用，如果禁用就不能点击了
+            if ($(this).hasClass('disabled')) {
                 return;
             }
-            var mobile = $('.mobile').val().trim();
-            if(isNaN(mobile) || mobile.length != 11){
+            // 验证手机号
+            var mobile = $(".mobile").val().trim();
+            // 必须是数字，必须是11位
+            if (isNaN(mobile) || mobile.length != 11) {
                 tip('请输入正确的手机号码');
+                return;
             }
-            //禁用按钮
+            // 禁用按钮
             $(this).addClass('disabled');
+            // 数字提示
             var seconds = 3;
             $(this).val(`获取验证码(${seconds})`);
-            this.timer = setInterval((function(){
+            this.timer = setInterval((function () {
                 seconds--;
                 $(this).val(`获取验证码(${seconds})`);
-                if(seconds <= 0){
-                    clearInterval(this,timer);
+                if (seconds <= 0) {
+                    // 清除定时器，样式恢复原状，内容恢复原状
+                    clearInterval(this.timer);
                     $(this).val('获取验证码').removeClass('disabled');
                 }
-            }).bind(this),1000);
+            }).bind(this), 1000);
+            // 发送请求
             var xhr = new XMLHttpRequest();
-            xhr.open('get','http://127.0.0.1:8080/getCodeWithoutPhone');
+            xhr.open('get', 'http://127.0.0.1:8080/getCodeWithoutPhone');
             xhr.send();
-            xhr.onreadystatechange = function(){
-                if(xhr.status === 200 && xhr.readyState === 4){
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 把响应体转换为对象
                     var resObj = JSON.parse(xhr.responseText);
-                    if(resObj.code){
-                        tip(`您的验证码是${resObj.code},来自【xxx科技公司】`);
-                    }
-                }
-            }
-        })
-        
-        //实现注册
-        $('.submit').on('click',function(){
-            var userName = $('.name').val();
-            var pass = $('.pass').val();
-            var repass = $('.repass').val();
-            var mobile = $('.mobile').val();
-            var code = $('.code').val();
-            if(pass !== repass){
-                tip('两次密码不一致哦!!');
-                return;
-            }
-            var xhr = new XMLHttpRequest;
-            xhr.open('post','http://127.0.0.1:8080/doRegister');
-            xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-            xhr.send(`userName=${userName}&password=${pass}&phone=${mobile}`);
-            xhr.onreadystatechange = function(){
-                if(xhr.status === 4 && xhr.readyState ===200){
-                    var resObj = JSON.parse(xhr.responseText);
-                    if(resObj.code != 200){
-                        tip('注册失败');
-                    }else{
-                        tip('恭喜，注册成功，我们稍后将会为您自动转到登陆页面');
-                        setTimeout(function(){
-                            location.href = './login.html';
-                        },2000);
+                    if (resObj.code) {
+                        tip(`您的验证码是${resObj.code},来自【大前端科技】`);
+                        console.log(resObj.code);
                     }
                 }
             }
         })
 
-    })
+        // 4.实现注册
+        // 获取按钮，注册点击事件
+        $('.submit ').on('click', function () {
+            // 还是要把之前写好的验证再次验证 - 非空-是否重复
+
+            // 需要把所有的数据收集起来
+            var userName = $('.name').val();
+            var pass = $('.pass').val();
+            var repass = $(".repass").val();
+            var mobile = $(".mobile").val();
+            var code = $('.code').val();
+            // - 一个一个的验证了 - 非空、用户是否重复
+            // 密码两次要一致
+            if (pass !== repass) {
+                tip('两次密码不一致哦！！');
+                return;
+            }
+            // 数据全都验证完毕，就可以使用post请求发送了
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', 'http://127.0.0.1:8080/doRegister');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(`userName=${userName}&password=${pass}&phone=${mobile}`);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var resObj = JSON.parse(xhr.responseText);
+                    // 根据不同的逻辑，提示用户
+                    if (resObj.code != 200) {
+                        tip('注册失败');
+                    } else {
+                        // 注册成功了，跳转到登录页面给用户进行登录
+                        tip('恭喜，注册成功，我们稍后将会为您自动跳转到登录页面');
+                        setTimeout(function () {
+                            location.href = './login.html';
+                        }, 2000);
+                    }
+                }
+            }
+        });
+    });
 </script>
 
 </html>
