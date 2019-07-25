@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>表单注册</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #F7F7F7;
+        }
+
+        ul {
+            margin: 0;
+            padding: 50px;
+            list-style: none;
+        }
+
+        .register {
+            width: 800px;
+            margin: 50px auto;
+            background-color: #FFF;
+            border: 1px solid #CCC;
+            border-radius: 5px;
+        }
+
+        li {
+            display: flex;
+            margin: 20px 0;
+        }
+
+        label,
+        input {
+            display: block;
+            float: left;
+            height: 46px;
+            font-size: 24px;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        label {
+            width: 200px;
+            line-height: 46px;
+            margin-right: 30px;
+            text-align: right;
+        }
+
+        input {
+            width: 320px;
+            padding: 8px;
+            line-height: 1;
+            outline: none;
+            position: relative;
+        }
+
+        input.code {
+            width: 120px;
+        }
+
+        input.verify {
+            width: 190px;
+            margin-left: 10px;
+        }
+
+        input.disabled {
+            background-color: #CCC !important;
+            cursor: not-allowed !important;
+        }
+
+        input[type=button] {
+            border: none;
+            color: #FFF;
+            background-color: #E64145;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .tips {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 40px;
+            text-align: center;
+        }
+
+        .tips p {
+            min-width: 300px;
+            max-width: 400px;
+            line-height: 40px;
+            margin: 0 auto;
+            color: #FFF;
+            display: none;
+            background-color: #C91623;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register">
+        <form id="ajaxForm">
+            <ul>
+                <li>
+                    <label for="">用户名</label>
+                    <input type="text" name="userName" class="name">
+                </li>
+                <li>
+                    <label for="">请设置密码</label>
+                    <input type="password" name="password" class="pass">
+                </li>
+                <li>
+                    <label for="">请确认密码</label>
+                    <input type="password" name="" class="repass">
+                </li>
+                <li>
+                    <label for="">验证手机</label>
+                    <input type="text" name="phone" class="mobile">
+                </li>
+                <li>
+                    <label for="">短信验证码</label>
+                    <input type="text" name="" class="code">
+                    <!-- <div class="btn verify disabled">获取验证码</div> -->
+                    <input type="button" value="获取验证码" class="verify">
+                </li>
+                <li>
+                    <label for=""></label>
+                    <input type="button" class="submit " value="立即注册">
+                </li>
+            </ul>
+        </form>
+    </div>
+    <div class="tips">
+        <p>123</p>
+    </div>
+</body>
+<script src="../static/js/jquery.js"></script>
+
+<script>
+    function tip(content) {
+        $('.tips > p').text(content).stop().fadeIn(100, function () {
+            var _this = this;
+            setTimeout(function () {
+                $(_this).stop().fadeOut(3000);
+            }, 1000);
+        });
+    }
+
+    $(function () {
+        // 1.用户名验证非空
+        $('.name').on('blur', function () {
+            var currentValue = $(this).val();
+            if(currentValue.trim().length === 0){
+                $('.tips > p').text('用户名不能为空').stop().fadeIn(100,function(){
+                    var _this = this;
+                    setTimeout(function(){
+                        $(_this).stop().fadeOut(3000);
+                    },1000);
+                });
+                //如果是空的话，就不再往下继续执行
+                return;
+            }
+        })
+
+        //2.验证用户名是否重复
+        var xhr = new XMLHttpRequest();
+        xhr.open('get','http://127.0.0.1:8080/isUserNameExist?userName=' + currentValue);
+        xhr.send();
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var resObj = JSON.parse(xhr.responseText);
+                if(resObj.code != 200){
+                    $('.tips > p'.text('用户名已经存在').stop().fadeIn(100,function(){
+                        var _this = this;
+                        setTimeout(function(){
+                            $(_this).stop().fadeOut(3000);
+                        },1000)
+                    }))
+                }
+            }
+        }
+
+        //3.点击获取验证码
+        $('.verify').on('click',function(){
+            if($(this).hasClass('disabled')){
+                return;
+            }
+            var mobile = $('.mobile').val().trim();
+            if(isNaN(mobile) || mobile.length != 11){
+                tip('请输入正确的手机号码');
+            }
+            //禁用按钮
+            $(this).addClass('disabled');
+            var seconds = 3;
+            $(this).val(`获取验证码(${seconds})`);
+            this.timer = setInterval((function(){
+                seconds--;
+                $(this).val(`获取验证码(${seconds})`);
+                if(seconds <= 0){
+                    clearInterval(this,timer);
+                    $(this).val('获取验证码').removeClass('disabled');
+                }
+            }).bind(this),1000);
+            var xhr = new XMLHttpRequest();
+            xhr.open('get','http://127.0.0.1:8080/getCodeWithoutPhone');
+            xhr.send();
+            xhr.onreadystatechange = function(){
+                if(xhr.status === 200 && xhr.readyState === 4){
+                    var resObj = JSON.parse(xhr.responseText);
+                    if(resObj.code){
+                        tip(`您的验证码是${resObj.code},来自【xxx科技公司】`);
+                    }
+                }
+            }
+        })
+        
+        //实现注册
+        $('.submit').on('click',function(){
+            var userName = $('.name').val();
+            var pass = $('.pass').val();
+            var repass = $('.repass').val();
+            var mobile = $('.mobile').val();
+            var code = $('.code').val();
+            if(pass !== repass){
+                tip('两次密码不一致哦!!');
+                return;
+            }
+            var xhr = new XMLHttpRequest;
+            xhr.open('post','http://127.0.0.1:8080/doRegister');
+            xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+            xhr.send(`userName=${userName}&password=${pass}&phone=${mobile}`);
+            xhr.onreadystatechange = function(){
+                if(xhr.status === 4 && xhr.readyState ===200){
+                    var resObj = JSON.parse(xhr.responseText);
+                    if(resObj.code != 200){
+                        tip('注册失败');
+                    }else{
+                        tip('恭喜，注册成功，我们稍后将会为您自动转到登陆页面');
+                        setTimeout(function(){
+                            location.href = './login.html';
+                        },2000);
+                    }
+                }
+            }
+        })
+
+    })
+</script>
+
+</html>
