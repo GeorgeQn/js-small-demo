@@ -1,0 +1,19 @@
+1.alert 和 return 应该放在大括号里面还是外面
+2.return 'rgb('+ r + ',' + g + ',' + b + ')'; r ,g ,b的引号给错，可以console.log排错；
+3.this.lis[i].style.width和lis[i].style.width;
+4.全选全部选里：flag==false;和flag=false;不一样；
+5.for(){};var放在for上面才对
+6.li.innerHTML = 和list.insertBefore()，一个是等号一个是括号；
+7.document.queryselector()括号里面类名的话没加.和id名的话没加#
+8.e.onmouseover = function () {
+                target = i * img.offsetWidth * -1;
+                ul.style.left = target + 'px';
+                circles.forEach(e => {
+                    e.classList.remove('current');
+                })
+                this.classList.add('current');
+                console.log(i);
+                currentImageIndex = i;
+            }
+	currentImageIndex = i;放在了外面,而且= 和 === 有本质区别;
+9.jq的each(i,e)和js的forEach(e,i)不同的
