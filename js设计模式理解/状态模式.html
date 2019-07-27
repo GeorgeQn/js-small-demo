@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    var ExecuteState = function () {
+
+            var StatesFn = {
+
+                    states_7: function (data) {
+
+                        //功能代码
+
+                    },
+
+                    state_20: function (data, currentTime) {
+
+                        //功能代码
+
+                    },
+
+                    state_30: function (data, currentTime) {
+
+                        //功能代码
+
+                    },
+
+                    state_40: function (data, currentTime) {
+
+                        //功能代码
+
+                    }
+
+                    function executeFn(state, data, currentTime) {
+
+                        StatesFn['state_' + state] && StatesFn['state_' + state](data, currentTime);
+
+                    }
+
+
+
+                    return {
+
+                        execute: executeFn
+
+                    }
+
+                    // 前因：
+
+                    // 项目接口会返回很多状态码， 通常的做法是使用ifelse 去处理状态， 或者将if
+                    // else 封装成一个方法， 调用但是即便用方法封装， 还是完全避免用
+                    // if
+                    // else
+                    //     去处理状态， 今天我们采用一种新的尝试， 使用状态模式来进行N多种状态的下的逻辑处理， 来避免N多种状态下反锁的if
+                    // else 语句维护困难的问题。
+
+                    // 状态模式： 不同的状太会产生不同的行为， 即当一个对象内部状态改变时， 会导致其行为发生变化。
+
+
+
+                    // 实践：
+
+                    // IVR项目中提交预约回电时， 场景不同会有不同的错误码， 如20,
+                    // 30,
+                    // 40,
+                    // 50…… 等等， 如果采用if
+                    // else 语句判断会非常繁琐并难以维护， 采用状态模式就方便很多， 具体实践如下：
+
+                    // 首先定义一个状态类， 根据不同状态定义不同行为， 并最终对外提供一个API，
+
+
+
+
+
+                    //调用API：ExecuteState.execute(state,data,currentTime);
+
+                    //如此就打打减少了ifelse 使用量，当状态模式使用到极致时，程序中是没有if else
+                    //出现的，当然如果需求很稳定，很简单的一个分支判断就可以搞定的情况下，如果采用状态模式实现，这样开发成本会很高，所以应该根据项目实际///情况制定相应的实现方案
+</script>
+
+</html>
+
+
+ 
