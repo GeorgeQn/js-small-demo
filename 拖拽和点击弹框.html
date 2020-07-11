@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        #modal {
+            width: 320px;
+            height: 296px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            display: none;
+            z-index: 999;
+            /* border: 1px solid #333; */
+            border: 1px solid #e4e4e4;
+            border-bottom:none;
+        }
+
+        /* #modal .win {
+            width: 80%;
+            height: 120px;
+            background-color: #ffffff;
+            position: relative;
+        } */
+
+        span {
+            position: absolute;
+            right: 3px;
+            top: 0px;
+            font-size: 30px;
+            color: #333;
+            cursor: pointer;
+            display: inline;
+        }
+
+        .win p {
+            text-align: center;
+        }
+
+        #viewDiv h3 {
+            display: inline-block;
+            background-color: #5faaee;
+            width: 305px;
+            padding: 10px 0 10px 15px;
+            margin: 0;
+            color: #fff;
+        }
+
+        #viewDiv h4 {
+            padding: 10px 0 15px 15px;
+            margin: 0;
+            border-bottom: 1px solid #e4e4e4;
+        }
+
+        #viewDiv p {
+            padding: 10px 0 15px 15px;
+            margin: 0;
+            border-bottom: 1px solid #e4e4e4;
+            font-size: 12px;
+        }
+    </style>
+    <script>
+        var viewDiv = document.getElementById('viewDiv');
+        var close = document.getElementsByClassName("close");
+        // var modal = document.getElementById()    
+        //点击按钮，弹出弹框    
+        function openframe() {
+            modal.style.display = "block";
+        };
+        //点击叉号，关闭弹窗
+        function closeframe(e) {
+            modal.style.display = "none";
+            window.event ? window.event.cancelBubble = true : e.stopPropagation();
+        };
+
+        // 拖拽效果
+        window.onload = function () {
+            //拖拽功能(主要是触发三个事件：onmousedown\onmousemove\onmouseup) 
+
+            var drag = document.getElementById('modal');
+            //点击某物体时，用drag对象即可，move和up是全局区域，也就是整个文档通用，应该使用document对象而不是drag对象(否则，采用drag对象时物体只能往右方或下方移动) 
+            drag.onmousedown = function (e) {
+                var e = e || window.event; //兼容ie浏览器 
+                var diffX = e.clientX - drag.offsetLeft; //鼠标点击物体那一刻相对于物体左侧边框的距离=点击时的位置相对于浏览器最左边的距离-物体左边框相对于浏览器最左边的距离 
+                var diffY = e.clientY - drag.offsetTop;
+                console.log(diffX, diffY)
+                /*低版本ie bug:物体被拖出浏览器可是窗口外部时，还会出现滚动条， 
+                  解决方法是采用ie浏览器独有的2个方法setCapture()\releaseCapture(),这两个方法， 
+                  可以让鼠标滑动到浏览器外部也可以捕获到事件，而我们的bug就是当鼠标移出浏览器的时候， 
+                  限制超过的功能就失效了。用这个方法，即可解决这个问题。注：这两个方法用于onmousedown和onmouseup中*/
+                if (typeof drag.setCapture != 'undefined') {
+                    drag.setCapture();
+                }
+                document.onmousemove = function (e) {
+                    var e = e || window.event; //兼容ie浏览器 
+                    var left = e.clientX - diffX;//物体边框相对于浏览器最左边的距离
+                    var top = e.clientY - diffY;
+                    //控制拖拽物体的范围只能在浏览器视窗内，不允许出现滚动条 
+                    // if (left < 0) {
+                    //     left = 0;
+                    // } else if (left > window.innerWidth - drag.offsetWidth) {
+                    //     left = window.innerWidth - drag.offsetWidth;
+                    // }
+                    // if (top < 0) {
+                    //     top = 0;
+                    // } else if (top > window.innerHeight - drag.offsetHeight) {
+                    //     top = window.innerHeight - drag.offsetHeight;
+                    // }
+                    //移动时重新得到物体的距离，解决拖动时出现晃动的现象 
+                    drag.style.left = left + 'px';
+                    drag.style.top = top + 'px';
+                };
+                document.onmouseup = function (e) { //当鼠标弹起来的时候不再移动 
+                    this.onmousemove = null;
+                    this.onmouseup = null; //预防鼠标弹起来后还会循环（即预防鼠标放上去的时候还会移动） 
+                    //修复低版本ie bug 
+                    if (typeof drag.releaseCapture != 'undefined') {
+                        drag.releaseCapture();
+                    }
+                };
+            };
+        };
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv" onclick="openframe()">
+        <div id="modal">
+            <span class="close" onclick="closeframe()">×</span>
+            <h3 id="diancha">地块信息</h3>
+            <div class="left" style="float: left;width: 45%;">
+                <p>地块编号:#532453</p>
+                <p>行政区域:广州</p>
+                <p>地块位置:天河</p>
+                <p>用地性质:拆迁中</p>
+                <p>用地面积:1000㎡</p>
+                <p>项目名称:天河项目</p>
+            </div>
+            <div class="right" style="float:right;width: 55%;">
+                <p>合同编号:#f312</p>
+                <p>受让人:孙先生</p>
+                <p>园区:A区</p>
+                <p>约定动工时间:2019-10-12</p>
+                <p>约定竣工时间:2019-10-12</p>
+                <p>签约时间:2019-10-12</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

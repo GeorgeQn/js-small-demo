@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todoListJs</title>
+</head>
+<style>
+    #table ul li{
+        width:118px;
+        height: 24px;
+        float: left;
+        list-style: none;
+    }
+    #table{
+    width: 400px;
+    margin-left: 10px;
+}
+    #detail .deleteBtn{
+        text-align: right;
+    }
+    #detail .deleteBtn{
+        border: none;
+        background: none;
+    }
+    #detail .deleteBtn:focus{
+        outline: none;
+    }
+</style>
+<body>
+    <p>todo list</p>
+    <input id="input" type="text"> <span><button id="button">+</button></span>
+    <p id="task">已添加的任务</p>
+    <div id='table'>
+
+    </div>
+</body>
+<script>
+    var input = document.getElementById('input');
+    var button = document.getElementById('button');
+    var table = document.getElementById('table');
+    var deleteBtns = document.getElementsByClassName('deleteBtn')
+    // 新增信息函数
+    function addLitoUl (obj){
+        obj = {
+            value:input.value,
+        }
+        table.innerHTML += '<ul>' +  '<li>' + obj.value + '</li>'  + '<li>默认</li>' + '<li>' + '<button class= \"deleteBtn\">x</button>' + '</li>' + '</ul>';
+    }
+    // 点击新增
+    button.onclick=function(){
+        addLitoUl(input);
+        // 点击删除
+        for(let i = 0; i < deleteBtns.length;i++){
+            deleteBtns[i].onclick = function(){
+                
+                console.log(table.childNodes)
+
+            }
+        }
+    }
+    
+</script>
+</html>

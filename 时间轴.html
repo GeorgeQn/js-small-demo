@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    
+<style>
+    .dot{
+        border:1px solid #e4e7ed;
+        width: 5px;
+        height: 5px;
+        border-radius: 5px;
+        background: #e4e7ed;
+        margin: auto;
+        margin-bottom: -4px;
+        cursor: pointer;
+    }
+    .item{
+        flex:1;
+        border-bottom:1px solid #e4e7ed;
+    }
+    .current{
+        border:1px solid red;
+        background: red;
+    }
+    .diKuaiContent{
+        display: none;
+    }
+</style>
+</head>
+<body>
+        <div style="display:flex;">
+            <div style="flex:1;display:flex">
+                <div style="position: absolute;left: 100px;top:0px; ">2000-01</div>
+                <div style="flex:1"></div>
+                <div class="dot"></div>
+                <div class="item"></div>
+            </div>
+            <div style="flex:1;display:flex">
+                <div></div>
+                <div class="item"></div>
+                <div class="dot"></div>
+                <div class="item"></div>
+            </div>
+            <div style="flex:1;display:flex">
+                <div class="item"></div>
+                <div class="dot"></div>
+                <div class="item"></div>
+            </div>
+            <div style="flex:1;display:flex">
+                <div class="item"></div>
+                <div class="dot"></div>
+                <div class="item"></div>
+            </div>
+            <div style="flex:1;display:flex">
+                <div class="item"></div>
+                <div class="dot"></div>
+                <div style="flex:1;"></div>
+            </div>
+            
+        </div>
+
+        <div class="diKuaiContent">1</div>
+        <div class="diKuaiContent">2</div>
+        <div class="diKuaiContent">3</div>
+        <div class="diKuaiContent">4</div>
+        <div class="diKuaiContent">5</div>
+
+
+</body>
+<script>
+    var dots = document.getElementsByClassName('dot');
+    var divs = document.getElementsByClassName('diKuaiContent');
+    for(var i = 0; i < dots.length; i++){
+        var dot = dots[i];
+        dot.index = i;
+        dot.onclick = function(){
+            for(j = 0;j < dots.length;j++){
+                dots[j].setAttribute('style','background: #e4e7ed;border:1px solid #e4e7ed')
+            }
+            this.setAttribute('style','background: red;border:1px solid red')
+            for(k = 0;k < divs.length;k++){
+                divs[k].style.display = 'none';
+            }
+            divs[this.index].style.display = 'block';
+        }
+    }
+</script>
+</html>
